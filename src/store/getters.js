@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-09 20:42:40
+ * @LastEditTime: 2023-02-14 21:33:48
  * @FilePath: \hrsaas\src\store\getters.js
  * @Description:
  *
@@ -10,7 +10,8 @@
  */
 const getters = {
   sidebar: state => state.app.sidebar,
-  device: state => state.app.device
+  device: state => state.app.device,
+  token: state => state.user.token
 
 }
 export default getters

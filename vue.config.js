@@ -35,6 +35,17 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    // TODO:配置反向代理
+    prosy: {
+      '/api': {
+        // TODO: BAIDO 当地址中出现 api 触发代理机制
+        target: 'http://ihrm-java.itheima.net/', // 执行需要代理的服务器
+        changOrigin: true // 设置是否支持跨域
+        // 重写路径
+        // pathRewrites: {}
+
+      }
     }
     // before: require('./mock/mock-server.js')
   },
