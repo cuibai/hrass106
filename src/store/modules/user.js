@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-14 21:28:34
+ * @LastEditTime: 2023-02-15 21:41:23
  * @FilePath: \hrsaas\src\store\modules\user.js
  * @Description:
  *
@@ -10,6 +10,7 @@
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
  */
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login } from '@/api/user'
 // 外边定义三个变量 简化代码
 // 状态
 const state = {
@@ -32,19 +33,16 @@ const mutations = {
 const actions = {
   // 定义login action  也需要参数 调用action时 传递过来的参数
   async login(context, data) {
-    const result = await this.login(data) // 实际上就是一个promise  result就是执行的结果
-    // axios默认给数据加了一层data
-    if (result.data.success) {
-      // 表示登录接口调用成功 也就是意味着你的用户名和密码是正确的
-      // 现在有用户token
-      // actions 修改state 必须通过mutations
-      context.commit('setToken', result.data.data)
-    }
+    // 调用api 接口
+    const result = await login(data) // 拿到token
+    context.commit('setToken', result) // 设置token
   }
 }
+const getters = {}
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

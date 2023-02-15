@@ -37,7 +37,8 @@ module.exports = {
       errors: true
     },
     // TODO:配置反向代理
-    prosy: {
+    proxy: {
+      // TODO: 和基础 development 中的代理地址保持一致
       '/api': {
         // TODO: BAIDO 当地址中出现 api 触发代理机制
         target: 'http://ihrm-java.itheima.net/', // 执行需要代理的服务器
