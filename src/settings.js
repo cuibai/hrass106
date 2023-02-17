@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-09 22:28:09
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-10 21:06:26
+ * @LastEditTime: 2023-02-17 21:19:50
  * @FilePath: \hrsaas\src\settings.js
  * @Description:
  *
@@ -22,5 +22,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: false
+  sidebarLogo: true // 图标显示
 }

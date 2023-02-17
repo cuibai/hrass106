@@ -68,16 +68,16 @@
 </template>
 
 <script>
-import { validMoblie } from '@/utils/validate'
+import { validMobile } from '@/utils/validate'
 import { mapActions } from 'vuex'
 // import user from '@/store/modules/user'
 
 export default {
   name: 'Login',
   data() {
-    const validateMoblie = (rule, value, callback) => {
+    const validateMobile = (rule, value, callback) => {
       // 配置新的规则则 满足手机号必填
-      validMoblie(value) ? callback() : callback(new Error('格式错误'))
+      validMobile(value) ? callback() : callback(new Error('格式错误'))
     }
     return {
       loginForm: {
@@ -87,7 +87,7 @@ export default {
       loginRules: {
         moblie: [
           { require: true, trigger: 'blur', message: '手机号不能为空' },
-          { validator: validateMoblie }
+          { validator: validateMobile }
         ],
         password: [
           { required: true, trigger: 'blur', message: '密码不能为空' }, {
@@ -122,7 +122,7 @@ export default {
     },
     handleLogin() {
       // 表单的手动校验
-  this.$refs.loginForm.validate(async isOK => {
+      this.$refs.loginForm.validate(async isOK => {
         if (isOK) {
           try {
             this.loading = true

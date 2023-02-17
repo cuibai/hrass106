@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-15 21:41:23
+ * @LastEditTime: 2023-02-16 20:15:03
  * @FilePath: \hrsaas\src\store\modules\user.js
  * @Description:
  *
@@ -38,11 +38,10 @@ const actions = {
     context.commit('setToken', result) // 设置token
   }
 }
-const getters = {}
+
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
   actions
 }

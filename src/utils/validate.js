@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-09 22:28:09
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-13 20:54:47
+ * @LastEditTime: 2023-02-16 21:14:20
  * @FilePath: \hrsaas\src\utils\validate.js
  * @Description:
  *
@@ -32,6 +32,6 @@ export function validUsername(str) {
 /**
  *  校验手机号方法
  * */
-export function validMoblie(str) {
+export function validMobile(str) {
   return /^1[3-9]\d{9}$/.test(str)
 }
