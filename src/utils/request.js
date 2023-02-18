@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-09 22:28:09
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-15 21:16:39
+ * @LastEditTime: 2023-02-18 17:17:25
  * @FilePath: \hrsaas\src\utils\request.js
  * @Description:
  *
@@ -10,6 +10,7 @@
  */
 import axios from 'axios'
 import { Message } from 'element-ui'
+import store from '@/store'
 
 const service = axios.create({
   // 配置编译环境和发布环境下的访问地址
@@ -19,8 +20,22 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // /dev/api prod/api
   timeout: 5000 // 配置等待超时
 })
-// 请求拦截器
-service.interceptors.request.use()
+/**
+ * 请求拦截器
+ * 凡是需要开门的地址 一律需要钥匙
+ * */
+service.interceptors.request.use(config => {
+  // config 是请求信息,任何时候都是要返回的
+  // 拿到token 注入token
+  if (store.getters.token) {
+  // 判断getter快捷访问中指向的token是否存在,数据改写为要求的
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
+  }
+  // 数据改写完毕,输出config
+  return config
+}, error => {
+  return Promise.reject(error)
+})
 // 响应拦截器
 service.interceptors.response.use(response => {
   // axios默认加了一层data

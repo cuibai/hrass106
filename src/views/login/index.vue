@@ -20,9 +20,9 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.moblie"
+          v-model="loginForm.mobile"
           placeholder="用户名手机号"
-          name="username"
+          name="mobile"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -81,11 +81,11 @@ export default {
     }
     return {
       loginForm: {
-        moblie: '13800000002',
+        mobile: '13800000002',
         password: '123456'
       },
       loginRules: {
-        moblie: [
+        mobile: [
           { require: true, trigger: 'blur', message: '手机号不能为空' },
           { validator: validateMobile }
         ],
