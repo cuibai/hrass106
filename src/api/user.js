@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-09 22:28:09
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-18 17:07:18
+ * @LastEditTime: 2023-02-20 21:12:49
  * @FilePath: \hrsaas\src\api\user.js
  * @Description:
  *
@@ -32,6 +32,18 @@ export function getUserInfo() {
   })
 }
 
+/**
+ * 为了方便获取用户的头像显示
+ * 封装一个单独的接口
+ * 解决当前情况
+ * 注意: 用户所需要的的id 在上一个接口处 已经获取到了
+ * 可以直接在后面的内容中使用
+ */
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
+}
 export function logout() {
 
 }
