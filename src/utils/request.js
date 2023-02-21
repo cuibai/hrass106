@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-09 22:28:09
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-18 17:17:25
+ * @LastEditTime: 2023-02-21 21:53:51
  * @FilePath: \hrsaas\src\utils\request.js
  * @Description:
  *
@@ -11,7 +11,10 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
-
+import router from '@/router'
+// 配置时间戳函数
+import { getTimeStamp } from '@/utils/auth'
+const TimeOut = 3600 // 配置超时函数
 const service = axios.create({
   // 配置编译环境和发布环境下的访问地址
   /**
@@ -28,7 +31,16 @@ service.interceptors.request.use(config => {
   // config 是请求信息,任何时候都是要返回的
   // 拿到token 注入token
   if (store.getters.token) {
-  // 判断getter快捷访问中指向的token是否存在,数据改写为要求的
+    // token 注入完毕 检测时间戳是否超时
+    if (IsCheckTimeOut) {
+      // 根据返回结果做操作 true token过期了
+      // 调用退出操作
+      store.dispatch('user/logout')
+      // 返回登录页
+      router.push('/login')
+      return Promise.reject(new Error('token 登录超时,请重新登录'))
+    }
+    // 判断getter快捷访问中指向的token是否存在,数据改写为要求的
     config.headers['Authorization'] = `Bearer ${store.getters.token}`
   }
   // 数据改写完毕,输出config
@@ -52,5 +64,12 @@ service.interceptors.response.use(response => {
   Message.error(error.message) // 提示错误信息
   return Promise.reject(error) // 返回执行错误 让当前的执行链跳出成功 直接进入 catch
 })
+// 配置超时函数
+function IsCheckTimeOut() {
+  var currentTime = Date.now() // 当前时间戳
+  var timeStamp = getTimeStamp() // 缓存时间戳
+  console.log(currentTime - timeStamp)
+  return (currentTime - timeStamp) / 100000 > TimeOut
+}
 
 export default service

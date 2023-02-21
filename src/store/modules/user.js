@@ -2,15 +2,16 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-20 21:23:49
+ * @LastEditTime: 2023-02-21 21:32:01
  * @FilePath: \hrsaas\src\store\modules\user.js
  * @Description:
  *
  *
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
  */
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
+
 // 外边定义三个变量 简化代码
 // 状态
 const state = {
@@ -46,6 +47,7 @@ const actions = {
     // 调用api 接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+    setTimeStamp() // 配置当前时间戳
   },
   // 获取用户数据
   async getUserInfo(context) {
@@ -56,6 +58,13 @@ const actions = {
     // 这里已经获取到用户基本资料 为了获取头像 在获取一次
     context.commit('setUserInfo', baseResult) // 提交到mutation
     return baseResult // 用作后期做权限
+  },
+  // 用户的登出操作
+  logout(context) {
+    // 先清除token,不仅删除内存中的 也删除了缓存中的
+    context.commit('removeToken')
+    // 再清除用户的个人信息
+    context.commit('removeUserInfo')
   }
 }
 
