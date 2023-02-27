@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-22 21:40:49
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-25 17:02:19
+ * @LastEditTime: 2023-02-27 21:47:08
  * @FilePath: \hrsaas\src\views\departments\index.vue
  * @Description:
  *
@@ -11,105 +11,54 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <!-- 组织架构内容 -->
-      <!-- 头部 -->
+      <!-- 实现页面的基本布局 -->
       <el-card class="tree-card">
-        <!-- 结构内容 -->
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          style="height: 40px"
-        >
-          <el-col>
-            <!-- 左侧 -->
-            <span>江苏省传智教育有限公司</span>
-          </el-col>
-          <el-col :span="4">
-            <!-- 右侧 -->
-            <el-row type="flex" justify="end">
-              <el-col>负责人</el-col>
-              <el-col>
-                <!-- 操作的下拉菜单 -->
-                <el-dropdown>
-                  <span>操作<i class="el-icon-arrow-down" /></span>
-                  <el-dropdown-menu slot="dropdown">
-                    <!-- 下拉选项 -->
-                    <el-dropdown-item>添加子部门</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-        <!-- 放置树形结构 -->
-        <el-tree
-          :data="departs"
-          :props="defaultProps"
-          :default-expand-all="true"
-        >
-          <!-- 传入内容 插槽内容 会循环多次 有多少节点 就循环多少次 -->
-          <!-- 作用域插槽 slot-scope="obj" 接收传递给插槽的数据   data 每个节点的数据对象-->
-          <el-row
-            slot-scope="{ data }"
-            type="flex"
-            justify="space-between"
-            align="middle"
-            style="height: 40px; width: 100%"
-          >
-            <el-col>
-              <!-- 左侧内容 -->
-              <span>{{ data.name }}</span>
-            </el-col>
-            <el-col :span="4">
-              <el-row type="flex" justify="end">
-                <el-col>{{ data.manager }}</el-col>
-                <el-col>
-                  <!-- 放置下拉菜单 -->
-                  <el-dropdown>
-                    <!-- 内容 -->
-                    <span>操作
-                      <i class="el-icon-arrow-down" />
-                    </span>
-                    <!-- 具名插槽 -->
-                    <el-dropdown-menu slot="dropdown">
-                      <!-- 下拉选项 -->
-                      <el-dropdown-item>添加子部门</el-dropdown-item>
-                      <el-dropdown-item>编辑部门</el-dropdown-item>
-                      <el-dropdown-item>删除部门</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </el-col>
-              </el-row>
-
-              <!-- 右侧内容 -->
-            </el-col>
-          </el-row></el-tree></el-card>
+        <!-- 用了一个行列布局 -->
+        <!-- 缺少treeNode -->
+        <tree-tools :tree-node="company" :is-root="true" />
+        <!--放置一个属性   这里的props和我们之前学习的父传子 的props没关系-->
+        <el-tree :data="departs" :props="defaultProps" default-expand-all>
+          <!-- 说明el-tree里面的这个内容 就是插槽内容 => 填坑内容  => 有多少个节点循环多少次 -->
+          <!-- scope-scope 是 tree组件传给每个节点的插槽的内容的数据 -->
+          <!-- 顺序一定是 执行slot-scope的赋值 才去执行 props的传值 -->
+          <tree-tools slot-scope="{ data }" :tree-node="data" />
+        </el-tree>
+      </el-card>
     </div>
   </div>
 </template>
-
 <script>
+import TreeTools from './components/tree-tools.vue'
+import { getDepartements } from '@/api/departments'
+import { tranListToTreeData } from '@/utils'
 export default {
+  components: {
+    TreeTools
+  },
   data() {
     return {
-      departs: [
-        {
-          name: '总裁办',
-          manager: '曹操',
-          children: [{ name: '董事会', manager: '曹丕' }]
-        },
-        { name: '行政部', manager: '刘备' },
-        { name: '人事部', manager: '孙权' }
-      ],
+      company: { name: '', manager: '' },
+      departs: [],
       defaultProps: {
         label: 'name' // 表示 从这个属性显示内容
       }
     }
+  },
+  created() {
+    this.getDepartements() // 调用自身接口
+  },
+  methods: {
+    async getDepartements() {
+      const result = await getDepartements()
+      // console.log(result)
+      // 根据返回的数据更新内容
+      this.company = { name: result.companyName, manager: '负责人' }
+      // 使用转化方法 转化获取到的数据
+      this.departs = tranListToTreeData(result.depts, '')
+    }
   }
 }
 </script>
-
 <style>
 .tree-card {
   padding: 30px 140px;

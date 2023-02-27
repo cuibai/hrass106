@@ -115,3 +115,27 @@ export function param2Obj(url) {
   })
   return obj
 }
+/**
+ * @param {tranListToTreeData} 将列表数据转换为树形数据 使用递归算法
+ * 1. 自身调用自身
+ * 2. 每次传入的参数要不一样
+ * 3. 避免死循环
+ */
+export function tranListToTreeData(list, rootValue) {
+  var arr = []
+  list.forEach(item => {
+    if (item.pid === rootValue) {
+      // rootVlaue 默认为空,先找pid为空 就是第1级数组 则继续往下找
+      const children = tranListToTreeData(list, item.id)
+      if (children.length) {
+        // children 的有长度,即存在子节点 保存子节点
+        item.children = children
+      }
+      // 遍历到的内容加入到arr中
+      arr.push(item)
+    }
+  })
+  // console.log(arr)
+  // 输出 arr 数组
+  return arr
+}
