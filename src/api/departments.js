@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-27 21:10:32
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-28 21:54:13
+ * @LastEditTime: 2023-03-01 20:33:12
  * @FilePath: \hrsaas\src\api\departments.js
  * @Description:
  *
@@ -31,5 +31,15 @@ export function delDepartments(id) {
   return request({
     url: `/company/department/${id}`, // 拼接一个id的地址
     method: 'delete'
+  })
+}
+/**
+ * 封装新增部门的 api
+ */
+export function addDepartments(data) {
+  return request({
+    url: '/company/department/',
+    method: 'POST',
+    data
   })
 }

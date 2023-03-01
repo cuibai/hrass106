@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-27 20:34:47
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-28 21:35:47
+ * @LastEditTime: 2023-03-01 21:19:16
  * @FilePath: \hrsaas\src\views\departments\components\tree-tools.vue
  * @Description:
  *
@@ -61,6 +61,9 @@ export default {
     operateDepts(type) {
       if (type === 'add') {
         // 添加子部门的操作
+        // 将add-dept 的show值由false转变为true
+        // 定义一个自定义方法,返回当点击的节点的值
+        this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         //  编辑部门的操作
       } else {
