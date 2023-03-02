@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-22 21:40:49
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-01 21:24:02
+ * @LastEditTime: 2023-03-02 21:26:40
  * @FilePath: \hrsaas\src\views\departments\index.vue
  * @Description:
  *
@@ -32,7 +32,7 @@
       </el-card>
     </div>
     <!-- 暂时查看组件 -->
-    <add-dept :show-dialog="showDialog" />
+    <add-dept :show-dialog="showDialog" :tree-node="node" />
   </div>
 </template>
 <script>
@@ -65,9 +65,15 @@ export default {
   methods: {
     async getDepartements() {
       const result = await getDepartements()
-      // console.log(result)
-      // 根据返回的数据更新内容
-      this.company = { name: result.companyName, manager: '负责人' }
+      /**
+       * 根据返回的数据更新内容
+       * 当我们操作跟级(总裁办)数据的时候会出现 添加部门名称相同 但是没有报错的情况
+       * 原因:
+       * 在最根级的tree-tool中 treenode属性并不存在id属性(undefined)
+       * 通过全等检验是无法判断出对应根节点的信息
+       * 所有的属性值中 新增id的是置为空 而不是undefined 避开debugger
+       */
+      this.company = { name: result.companyName, manager: '负责人', id: '' }
       // 使用转化方法 转化获取到的数据
       this.departs = tranListToTreeData(result.depts, '')
     },
