@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-22 21:40:49
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-02 21:26:40
+ * @LastEditTime: 2023-03-04 16:15:25
  * @FilePath: \hrsaas\src\views\departments\index.vue
  * @Description:
  *
@@ -27,12 +27,18 @@
             :tree-node="data"
             @delDepts="getDepartements"
             @addDepts="addDepts"
+            @editDepts="editDepts"
           />
         </el-tree>
       </el-card>
     </div>
     <!-- 暂时查看组件 -->
-    <add-dept :show-dialog="showDialog" :tree-node="node" />
+    <add-dept
+      ref="addDept"
+      :show-dialog.sync="showDialog"
+      :tree-node="node"
+      @addDepts="getDepartements"
+    />
   </div>
 </template>
 <script>
@@ -81,6 +87,16 @@ export default {
     addDepts(node) {
       this.showDialog = true
       this.node = node
+    },
+    // 触发编辑事件
+    editDepts(node) {
+      // 先打弹出层
+      this.showDialog = true
+      this.node = node
+      // 填充数据
+      console.log(this.$refs.addDept)
+      this.$refs.addDept.getDepartDetail(node.id)
+      // 保存后提交刷新数据
     }
   }
 }

@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-27 20:34:47
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-01 21:19:16
+ * @LastEditTime: 2023-03-04 15:36:06
  * @FilePath: \hrsaas\src\views\departments\components\tree-tools.vue
  * @Description:
  *
@@ -66,6 +66,8 @@ export default {
         this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         //  编辑部门的操作
+        //  配置一个自定义事件 点击谁 操作谁
+        this.$emit('editDepts', this.treeNode)
       } else {
         //  删除操作
         this.$confirm('确定要删除该部门吗').then(() => {

@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-03-01 20:34:39
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-02 21:59:06
+ * @LastEditTime: 2023-03-04 16:48:26
  * @FilePath: \hrsaas\src\views\departments\components\add-dept.vue
  * @Description:
  *
@@ -10,19 +10,43 @@
 -->
 // 设计新增部门的组件
 <template>
-  <el-dialog title="新增部门" :visible="showDialog">
+  <!-- 配置一个x的操作 弹出层的回调函数 -->
+  <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
     <!-- 表单数据 -->
-    <el-form label-width="120px" :model="formData" :rules="rules">
+    <el-form
+      ref="deptForm"
+      label-width="120px"
+      :model="formData"
+      :rules="rules"
+    >
       <el-form-item label="部门名称" prop="name">
-        <el-input v-model="formData.name" style="width: 80%" placeholder="1-50个字符" />
+        <el-input
+          v-model="formData.name"
+          style="width: 80%"
+          placeholder="1-50个字符"
+        />
       </el-form-item>
       <el-form-item label="部门编码" prop="code">
-        <el-input v-model="formData.code" style="width: 80%" placeholder="1-50个字符" />
+        <el-input
+          v-model="formData.code"
+          style="width: 80%"
+          placeholder="1-50个字符"
+        />
       </el-form-item>
       <el-form-item label="部门负责人" prop="manager">
-        <el-select v-model="formData.manager" style="width:80%" placeholder="请选择" @focus="getEmployeeSimple">
+        <el-select
+          v-model="formData.manager"
+          style="width: 80%"
+          placeholder="请选择"
+          @focus="getEmployeeSimple"
+        >
           <!-- 需要循环生成选项   这里做一下简单的处理 显示的是用户名 存的也是用户名-->
-          <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.username" />
+          <el-option
+            v-for="item in peoples"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="部门简介" prop="introduce">
@@ -38,18 +62,17 @@
     <!-- 确定 & 消息 -->
     <el-row slot="footer" type="flex" justify="center">
       <el-col :span="6">
-        <el-button size="small" type="info">取消</el-button>
-        <el-button type="success" size="small">确认</el-button>
+        <el-button size="small" type="info" @click="btnCancel">取消</el-button>
+        <el-button type="success" size="small" @click="btnOk">确认</el-button>
       </el-col>
     </el-row>
   </el-dialog>
 </template>
 
 <script>
-import { getDepartements } from '@/api/departments'
+import { addDepartments, getDepartements, getDepartDetail, updateDepartments } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 export default {
-
   // 配置一个组件来控制窗口的显示和隐藏
   props: {
     showDialog: {
@@ -108,10 +131,66 @@ export default {
       peoples: [] // 接收获取的员工简单列表的数据
     }
   },
+  computed: {
+    showTitle() {
+      return this.formData.id ? '编辑部门' : '新增子部门'
+    }
+  },
   methods: {
     // 配置获取员工数据
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple()
+    },
+    // 配置 点击事件
+    btnOk() {
+      // 点击确认后 判断当前的操作属于 新增还是编辑操作
+      // 触发自己的表单检验 返回一个值
+      this.$refs.deptForm.validate(async isOk => {
+        if (isOk) {
+          if (this.formData.id) {
+            // 编辑
+            await updateDepartments(this.formData)
+          } else {
+            // 新增
+            await addDepartments({ ...this.formData, pid: this.treeNode.id })
+          }
+          /**
+           * 验证通过后 访问新增的数据接口提交数据
+           * 因为是添加子部门 所以添加的pid就是当前部门的id
+           * 回传的是两个参数
+           * @addDepartments需要传入5个字段
+           * 当前表单有4个
+           * id是第五个
+           */
+          // 数据提交完毕 子组件提交到父组件 触发一个自定义事件
+          this.$emit('addDepts')
+          // 组件提交完毕 关闭弹层
+          this.$emit('update:showDialog', false) // 触发事件
+        }
+      })
+    },
+    btnCancel() {
+      // 为了后续的编辑 点击后需要清表单,resetfileds只能重置表单上的数据
+      // 非表单上的数据不能处理
+      this.formData = {
+        name: '', // 部门名称
+        code: '', // 部门编码
+        manager: '', // 部门管理者
+        introduce: '' // 部门介绍
+      }
+      /**
+       * 点击取消
+       * 关闭弹层
+       * 清除之前的校验数据
+       */
+      this.$emit('update:showDialog', false) // 取消校验
+      this.$refs.deptForm.resetFields() // 关闭弹窗
+    },
+    // 父组件操作子组件 在子组件配置方法
+    async getDepartDetail(id) {
+      // 在父组件调用子组件的过程中props的值是异步的 直接获取,treenode的值又可能获取不到
+      // 使用传参的方法去获取数据
+      this.formData = await getDepartDetail(id)
     }
   }
 }
