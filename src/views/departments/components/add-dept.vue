@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-03-01 20:34:39
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-04 16:48:26
+ * @LastEditTime: 2023-03-06 21:34:29
  * @FilePath: \hrsaas\src\views\departments\components\add-dept.vue
  * @Description:
  *
@@ -91,6 +91,22 @@ export default {
       // value 部门组件 名称去和当前已经存在的名称进行比较
       // 调取获取名称的接口
       const { depts } = await getDepartements()
+      let isRepeat = false
+      // 在操作前先判断当前的操作是编辑还是新增
+      if (this.formData.id) {
+        // 有id就是编辑模式
+        /**
+         * 编辑模式的要求
+         * 1. 编辑的操作为编辑当前的节点 同级目录下不能存在相同的内容节点
+         * 2. 在查找时 明确要查找的对象this.formData.id
+         * 3. 查找id时 要跳过查找自身
+         * 4. 在子模板下 this.formata.id 和 this.treenode.id
+         */
+        isRepeat = depts.filter(item => item.id !== this.formData.id && item.pid === this.treeNode.pid).some(item => item.name === value)
+      } else {
+        // 没有就是新增模式 沿用上一步的操作
+        isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
+      }
       // 获取的result-depets 存在需要的数据, 在同级部门进行数据的查找
       /**
        * 代码解释:
@@ -99,7 +115,6 @@ export default {
        * 如果返回的值是true 那么当前操作属于重复操作 重复操作会显示指定的err提示
        * 没有错误 正常进入命名的编写规则
        */
-      const isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
       isRepeat ? callback(new Error(`当前操作重复,重复内容 ${value}`)) : callback()
     }
     // TODO:根据检测部门名称 检查编码名称
@@ -107,7 +122,15 @@ export default {
     const checkCodeRepeat = async(rule, value, callback) => {
       // 先要获取最新的组织架构数据
       const { depts } = await getDepartements()
-      const isRepeat = depts.some(item => item.code === value && value) // 这里加一个 value不为空 因为我们的部门有可能没有code
+      // 同上 方法操作内容的自定义操作
+      let isRepeat = false
+      if (this.formData.id) {
+        // 编辑模式
+        isRepeat = depts.some(item => item.id !== this.formData.id && item.code === value && value)
+      } else {
+        // 新增模式
+        isRepeat = depts.some(item => item.code === value && value) // 这里加一个 value不为空 因为我们的部门有可能没有code
+      }
       isRepeat ? callback(new Error(`组织架构中已经有部门使用${value}编码`)) : callback()
     }
     return {
