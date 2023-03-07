@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-20 21:27:36
+ * @LastEditTime: 2023-03-07 21:27:39
  * @FilePath: \hrsaas\src\store\getters.js
  * @Description:
  *
@@ -15,6 +15,7 @@ const getters = {
   userId: state => state.user.userInfo.userId, // 建立用户id的映射
   name: state => state.user.userInfo.username, // 用户名快捷访问
   staffPhoto: state => state.user.userInfo.staffPhoto, // 定义一个头像的简写
+  companyId: state => state.user.userInfo.companyId, // 定义一个公司id的缩写
   // 暂时占位的变量,后面有需要在改
   avatar: state => state.user.avatar
 }
