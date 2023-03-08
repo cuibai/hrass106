@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-03-07 20:49:44
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-07 21:43:08
+ * @LastEditTime: 2023-03-08 21:37:33
  * @FilePath: \hrsaas\src\api\setting.js
  * @Description:
  *
@@ -37,3 +37,35 @@ export function deleteRole(id) {
     method: 'delete'
   })
 }
+/**
+ * @getRoleDetail
+ * 读取角色详情
+ */
+export function getRoleDetail(id) {
+  return request({
+    url: `/sys/role/${id}`
+  })
+}
+/**
+ * @updateRole
+ * 读取-修改角色
+ */
+export function updateRole(data) {
+  return request({
+    url: `/sys/role/${data.id}`,
+    data,
+    method: 'PUT'
+  })
+}
+/**
+ * @addRole
+ * 新增
+ */
+export function addRole(data) {
+  return request({
+    url: '/sys/role',
+    method: 'POST',
+    data
+  })
+}
+
