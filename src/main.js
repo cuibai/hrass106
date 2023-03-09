@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-02-08 22:55:36
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-02-09 20:46:13
+ * @LastEditTime: 2023-03-09 21:26:18
  * @FilePath: \hrsaas\src\main.js
  * @Description:
  *
@@ -20,7 +20,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control 权限控制
 import * as directives from '@/directives' // 引入解决图片错误的指令
-
+import Component from '@/components' // 引入公共组件的全局注册
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
@@ -29,6 +29,7 @@ Object.keys(directives).forEach(key => {
   // 注册自定义指令
   Vue.directive(key, directives[key])
 })
+Vue.use(Component) // 注册自己的插件
 
 Vue.config.productionTip = false
 
