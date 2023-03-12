@@ -2,7 +2,7 @@
  * @Author: cuibai 2367736060@qq.com
  * @Date: 2023-03-02 21:42:17
  * @LastEditors: cuibai 2367736060@qq.com
- * @LastEditTime: 2023-03-02 21:45:53
+ * @LastEditTime: 2023-03-12 21:50:07
  * @FilePath: \hrsaas\src\api\employees.js
  * @Description:
  *
@@ -26,5 +26,26 @@ export function getEmployeeList(params) {
   return request({
     url: '/sys/user',
     params
+  })
+}
+/**
+ * @ delEmployee()
+ * 创建删除员工的接口
+ */
+export function delEmployee(id) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'delete'
+  })
+}
+/**
+ * @addEmployee(data)
+ * 创建新增员工的接口
+ */
+export function addEmployee(data) {
+  return request({
+    url: '/sys/user',
+    method: 'post',
+    data
   })
 }
